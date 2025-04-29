@@ -9,7 +9,8 @@ trigger:
      - main
 
 pool:
-  vmImage: ubuntu-latest
+  name: SelfHostedPool
+
 
 steps:
 - script: dotnet build HelloWorldApp/HelloWorldApp.csproj
