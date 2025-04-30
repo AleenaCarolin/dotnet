@@ -13,8 +13,8 @@ pool:
 
 
 steps:
-- script: dotnet build HelloWorldApp/HelloWorldApp.csproj
+- script: dotnet build HelloWorldApp.csproj
   displayName: 'Build HelloWorldApp'
 
-- script: dotnet test HelloWorldApp/HelloWorldApp.csproj
+- script: dotnet test HelloWorldApp.csproj
   displayName: 'Test HelloWorldApp'
