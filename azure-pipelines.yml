@@ -11,10 +11,34 @@ trigger:
 pool:
   name: SelfHostedPool
 
+jobs:
 
-steps:
-- script: dotnet build HelloWorldApp.csproj
-  displayName: 'Build HelloWorldApp'
+- job: BuildAndRun
+  steps:
+  - script: dotnet build HelloWorldApp.csproj
+    displayName: 'Build HelloWorldApp'
 
-- script: dotnet test HelloWorldApp.csproj
-  displayName: 'Test HelloWorldApp'
+  - script: dotnet test HelloWorldApp.csproj
+    displayName: 'Test HelloWorldApp'
+
+- job: DockerImageBuildAndRun
+  steps:
+  - task: Docker@2
+    displayName: Build Docker Image
+    inputs:
+      command: build
+      Dockerfile: '**/Dockerfile'
+      repository: 'HelloWorldApp'
+      tags: 'latest'
+
+  - script: |
+      echo "Running the Docker container..."
+      docker run helloworldapp:latest
+    displayName: Run Docker Container
+    
+# steps:
+# - script: dotnet build HelloWorldApp.csproj
+#   displayName: 'Build HelloWorldApp'
+
+# - script: dotnet test HelloWorldApp.csproj
+#   displayName: 'Test HelloWorldApp'
