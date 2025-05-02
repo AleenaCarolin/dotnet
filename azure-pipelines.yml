@@ -11,30 +11,66 @@ trigger:
 pool:
   name: SelfHostedPool
 
+
+variables:
+  imageName: 'helloworldapp'
+  containerName: 'helloworldapp-container'
+  appPort: '5000'  # Update if your app uses a different port
+
 jobs:
-
-- job: BuildAndRun
+- job: BuildTestAndDockerize
+  displayName: 'Build, Test, Dockerize and Run'
   steps:
-  - script: dotnet build HelloWorldApp.csproj
-    displayName: 'Build HelloWorldApp'
 
-  - script: dotnet test HelloWorldApp.csproj
-    displayName: 'Test HelloWorldApp'
+    - script: dotnet build HelloWorldApp/HelloWorldApp.csproj
+      displayName: 'Build .NET App'
 
-- job: DockerImageBuildAndRun
-  steps:
-  - task: Docker@2
-    displayName: Build Docker Image
-    inputs:
-      command: build
-      Dockerfile: '**/Dockerfile'
-      repository: 'HelloWorldApp'
-      tags: 'latest'
+    - script: dotnet test HelloWorldApp/HelloWorldApp.csproj
+      displayName: 'Test .NET App'
 
-  - script: |
-      echo "Running the Docker container..."
-      docker run helloworldapp:latest
-    displayName: Run Docker Container
+    - task: Docker@2
+      displayName: 'Build Docker Image'
+      inputs:
+        command: build
+        repository: $(imageName)
+        Dockerfile: HelloWorldApp/dockerfile
+        tags: |
+          latest
+        buildContext: HelloWorldApp
+
+    - task: Docker@2
+      displayName: 'Run Docker Container'
+      inputs:
+        command: run
+        containerName: $(containerName)
+        imageName: $(imageName):latest
+        ports: |
+          $(appPort):$(appPort)
+          
+# jobs:
+
+# - job: BuildAndRun
+#   steps:
+#   - script: dotnet build HelloWorldApp.csproj
+#     displayName: 'Build HelloWorldApp'
+
+#   - script: dotnet test HelloWorldApp.csproj
+#     displayName: 'Test HelloWorldApp'
+
+# - job: DockerImageBuildAndRun
+#   steps:
+#   - task: Docker@2
+#     displayName: Build Docker Image
+#     inputs:
+#       command: build
+#       Dockerfile: '**/Dockerfile'
+#       repository: 'HelloWorldApp'
+#       tags: 'latest'
+
+#   - script: |
+#       echo "Running the Docker container..."
+#       docker run helloworldapp:latest
+#     displayName: Run Docker Container
     
 # steps:
 # - script: dotnet build HelloWorldApp.csproj

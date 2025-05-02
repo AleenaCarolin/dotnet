@@ -1,18 +1,18 @@
 # Use the official .NET SDK image
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Set the working directory in the container
 WORKDIR /app
 
 # Copy the csproj and restore any dependencies (via nuget)
 COPY HelloWorldApp/*.csproj ./HelloWorldApp/
-RUN dotnet restore HelloWorldApp/HelloWorldApp.csproj
+RUN dotnet restore HelloWorldApp.csproj
 
 # Copy the rest of the app
 COPY . .
 
 # Build the app
-RUN dotnet publish HelloWorldApp/HelloWorldApp.csproj -c Release -o /app/publish
+RUN dotnet publish HelloWorldApp.csproj -c Release -o /app/publish
 
 # Generate the runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:6.0
