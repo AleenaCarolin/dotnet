@@ -33,7 +33,7 @@ jobs:
       inputs:
         command: build
         repository: $(imageName)
-        Dockerfile: **/dockerfile
+        Dockerfile: '**/dockerfile'
         tags: |
           latest
         buildContext: HelloWorldApp
