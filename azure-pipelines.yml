@@ -43,6 +43,9 @@ jobs:
         docker run -d -p $(appPort):$(appPort) --name $(containerName) $(imageName):latest
       displayName: 'Run Docker Container'
 
+    - script: docker logs $(containerName)
+      displayName: 'View Docker Container Logs'
+
           
 # jobs:
 
