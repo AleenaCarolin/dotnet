@@ -22,10 +22,10 @@ jobs:
   displayName: 'Build, Test, Dockerize and Run'
   steps:
 
-    - script: dotnet build HelloWorldApp/HelloWorldApp.csproj
+    - script: dotnet build HelloWorldApp.csproj
       displayName: 'Build .NET App'
 
-    - script: dotnet test HelloWorldApp/HelloWorldApp.csproj
+    - script: dotnet test HelloWorldApp.csproj
       displayName: 'Test .NET App'
 
     - task: Docker@2
@@ -33,7 +33,7 @@ jobs:
       inputs:
         command: build
         repository: $(imageName)
-        Dockerfile: HelloWorldApp/dockerfile
+        Dockerfile: **/dockerfile
         tags: |
           latest
         buildContext: HelloWorldApp
