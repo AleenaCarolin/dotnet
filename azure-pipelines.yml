@@ -15,7 +15,7 @@ pool:
 variables:
   imageName: 'helloworldapp'
   containerName: 'helloworldapp-container'
-  appPort: '5000'  # Update if your app uses a different port
+  appPort: '8080'  
 
 jobs:
 - job: BuildTestAndDockerize
@@ -38,14 +38,11 @@ jobs:
           latest
         buildContext:  $(Build.SourcesDirectory)
 
-    - task: Docker@2
+    - script: |
+      echo "Running Docker container..."
+      docker run -d -p $(appPort):$(appPort) --name $(containerName) $(imageName):latest
       displayName: 'Run Docker Container'
-      inputs:
-        command: run
-        containerName: $(containerName)
-        imageName: $(imageName):latest
-        ports: |
-          $(appPort):$(appPort)
+
           
 # jobs:
 
