@@ -36,7 +36,7 @@ jobs:
         Dockerfile: '**/dockerfile'
         tags: |
           latest
-        buildContext: HelloWorldApp
+        buildContext:  $(Build.SourcesDirectory)
 
     - task: Docker@2
       displayName: 'Run Docker Container'
