@@ -5,17 +5,21 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 # Copy the csproj and restore any dependencies (via nuget)
-COPY HelloWorldApp/*.csproj ./HelloWorldApp/
-RUN dotnet restore HelloWorldApp.csproj
+#COPY HelloWorldApp/*.csproj ./HelloWorldApp/
+#RUN dotnet restore HelloWorldApp.csproj
+COPY HelloWorldApp.csproj ./
+RUN dotnet restore
+
 
 # Copy the rest of the app
 COPY . .
 
 # Build the app
-RUN dotnet publish HelloWorldApp.csproj -c Release -o /app/publish
+#RUN dotnet publish HelloWorldApp.csproj -c Release -o /app/publish
+RUN dotnet publish -c Release -o /app/publish
 
 # Generate the runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/publish .
 
